@@ -1,0 +1,13 @@
+the number of divided layers:20
+maximum number of iterations:100
+z_obs:0.0m
+dz:50.0m
+zmax:1000.0m
+m_min:0.0g/cm^3
+m_max:0.5g/cm^3
+epsilon:0.01
+miu:0.0
+wn:0.28
+sigma:0.1
+Max_GPU_Number:4
+nThreadPerBlock:32
