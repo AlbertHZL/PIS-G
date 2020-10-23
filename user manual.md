@@ -34,7 +34,7 @@ the inversion module would not work.
 
 (2) Create a new project: Click “New project” of “File” in the menu.
 
-![image](https://github.com/AlbertHZL/PIS-G/Supplementary_files/figures_in_user_manual/fig-1.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-1.jpg)
 
 (3) Load an existed project: Click “Load project” of “File” in the menu.
 
