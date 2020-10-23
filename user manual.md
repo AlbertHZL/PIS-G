@@ -88,7 +88,7 @@ save the project before closing it or the data may be lost.
 (4) After the preview, the names of data in columns could be revised. Rename it directly in the table. Click “Finish” to finish the wizards.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-4.jpg)
 
-1.3 Data display and operation
+### 1.3 Data display and operation
 (1) Data is displayed in the table, sorted by line.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-5.jpg)
 
@@ -96,7 +96,7 @@ save the project before closing it or the data may be lost.
 (3) Data would be changed as user’s operation.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-6.jpg)
 
-1.4 Set X & Y Coordinate
+### 1.4 Set X & Y Coordinate
 (1) Click “Set X & Y” of “Coordinate” in the menu.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-7.jpg)
 
@@ -107,7 +107,7 @@ save the project before closing it or the data may be lost.
 (2) Click “Save Result” of “Forwarding” in the menu, the synthetic data and forwarding parameters are saved into 2 text files.
 (3) Click “Save Result” of “Parallel 3D Inversion” in “Inversion”, save the inversion results and parameters into 2 text files.
 2 Data visualization
-2.1 Profile
+### 2.1 Profile
 (1) Click “Profile” of “Paint” in the menu.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-8.jpg)
 
@@ -116,7 +116,7 @@ save the project before closing it or the data may be lost.
 (4) V axis unit: choose the unit (g.u. or mGal or E) for displayed data by drop-down list.
 (5) Show Symbol: choose whether to show the symbol for the data or not by drop-down list.
 (6) The profile figure would change as the line is switched by drop-down list at top-left corner of table.
-2.2 Grid
+### 2.2 Grid
 (1) Click “Grid” of “Paint” in the menu.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-9.jpg)
 
@@ -124,7 +124,7 @@ save the project before closing it or the data may be lost.
 (3) Type the title for color bar in “Color Bar Title”.
 (4) Show Isoline or Value: choose whether to show the isolines, the values for the data or not by drop-down list.
 (5) X or Y axis unit: choose the unit (m or km) for x or y coordinate by drop-down list.
-2.3 3D view of Grid
+### 2.3 3D view of Grid
 (1) Click “3D” of “Paint” in the menu.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-10.jpg)
 
@@ -132,7 +132,7 @@ save the project before closing it or the data may be lost.
 (3) Type the title for color bar in “Color Bar Title”.
 (4) X or Y axis unit: choose the unit (m or km) for x or y coordinate by drop-down list.
 (5) Z axis unit: choose the unit (g.u. or mGal or E) for displayed data by drop-down list.
-2.4 3D view of Model
+### 2.4 3D view of Model
 (1) Click “Painting” of “Forwarding” in the menu, the synthetic model would be plotted in 3D view.
 (2) Click “Painting” of “Parallel 3D Inversion” in “Inversion”, the dialog below appears, import the parameters to obtain the figure.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-11.jpg)
@@ -140,7 +140,7 @@ save the project before closing it or the data may be lost.
 (3) lower or upper limit: the minimum or maximum value of the results to display.
 (4) Type the title for figure or color bar in “Figure Title” or “ColorBar Title”.
 (5) X or Y axis unit: choose the unit (m or km) for x or y coordinate by drop-down list.
-3 Forwarding
+## 3 Forwarding
 (1) Click “Forwarding” of “Forwarding” in the menu, forwarding wizard appears.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-12.jpg)
 
@@ -155,7 +155,7 @@ save the project before closing it or the data may be lost.
 (8) Preview the forwarding parameters for the model.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-14.jpg)
 
-4 Inversion
+## 4 Inversion
 (1) Click “Calculation” of “Parallel 3D Inversion” in “Inversion”.
  ![image](https://github.com/AlbertHZL/PIS-G/Supplementary files/figures in user manual/fig-15.jpg)
 
