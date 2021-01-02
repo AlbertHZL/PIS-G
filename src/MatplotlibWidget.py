@@ -1,6 +1,6 @@
 import matplotlib
 import numpy as np
-matplotlib.use("Qt5Agg")#声明使用QT5
+matplotlib.use("Qt5Agg")
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -11,27 +11,18 @@ from matplotlib.pyplot import *
 
 class MyMplCanvas(FigureCanvas):
     def __init__(self, parent=None):
-        # 配置中文显示
+        
         plt.rcParams['font.family'] = ['Times New Roman'] 
-        plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-        plt.rcParams['savefig.dpi'] = 300 #图片像素
-        #plt.rcParams['figure.dpi'] = 150 #分辨率
-        #plt.rcParams['figure.figsize'] = (2.0, 1.0) # 设置figure_size尺寸
+        plt.rcParams['axes.unicode_minus'] = False
+        plt.rcParams['savefig.dpi'] = 300
         
-        self.fig = Figure()  # 新建一个figure--绘图对象
-        self.axes = self.fig.add_subplot(111)  # 建立一个子图，如果要建立复合图，可以在这里修改
+        self.fig = Figure()
+        self.axes = self.fig.add_subplot(111)
 
-        #self.axes.hold(True)  # 每次绘图的时候不保留上一次绘图的结果
-        
-        #self.setAlignment(Qt.AlignCenter)
-        
         FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
 
-        '''定义FigureCanvas的尺寸策略，这部分的意思是设置FigureCanvas，使之尽可能的向外填充空间。'''
-        FigureCanvas.setSizePolicy(self,
-                                   QSizePolicy.Expanding,
-                                   QSizePolicy.Expanding)
+        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
     def section(self, number, fileName, x, y, xunit, vunit, flag):
@@ -47,12 +38,11 @@ class MyMplCanvas(FigureCanvas):
         for i in range(0, lines):
             zz=y[i*tLenth:(i+1)*tLenth]
             if flag==1:
-                self.axes.plot(x, zz, label=fileName[i], marker="o", markersize=3)#, labels=fileName[i]
+                self.axes.plot(x, zz, label=fileName[i], marker="o", markersize=3)
             else:
                 self.axes.plot(x, zz, label=fileName[i])
         self.axes.legend(loc='upper right')
         
-        #plt.title(temp)
         xunitnew = 'x/'+xunit
         yunitnew = 'y/'+vunit
         self.axes.set_ylabel(yunitnew)
@@ -69,7 +59,7 @@ class MyMplCanvas(FigureCanvas):
         for num in range(1,times):
             ellipses += [z[lengthX*num:lengthX*(num+1)]]
         levels=MaxNLocator(nbins=15).tick_values(min(z), max(z))
-        surf = self.axes.contourf(X, Y, ellipses, levels=levels, cmap=cm.jet)#levels=levels, cmap=cm.jet, linewidth=0.1
+        surf = self.axes.contourf(X, Y, ellipses, levels=levels, cmap=cm.jet)
         self.fig.colorbar(surf, shrink=1, aspect=10, label=colorbarTitle)
         xunitnew = 'x/'+xunit
         yunitnew = 'y/'+yunit
@@ -93,6 +83,6 @@ class MatplotlibWidget(QWidget):
     def initUi(self):
         self.layout = QVBoxLayout(self)
         self.mpl = MyMplCanvas(self)
-        self.mpl_ntb = NavigationToolbar(self.mpl, self)  # 添加完整的 toolbar
+        self.mpl_ntb = NavigationToolbar(self.mpl, self)
         self.layout.addWidget(self.mpl)
         self.layout.addWidget(self.mpl_ntb)
