@@ -5,9 +5,8 @@ from PyQt5.QtGui import *
 class ModelWizardWidget(QWidget):
     def __init__(self, parent=None):
         super(ModelWizardWidget, self).__init__(parent)
-        #记录模型相关数据
+        
         self.aa=[]
-        #第一行
         self.label1=QLabel()
         self.label1.setText("Model Shape：")
         self.label2=QLabel()
@@ -15,8 +14,8 @@ class ModelWizardWidget(QWidget):
         self.label3=QLabel()
         self.label3.setText("g/cm^3")
         self.cb=QComboBox()
-        self.cbItems = ["Drop-down to Select Model", "Cube"]#"球体", 
-        self.cb.addItems(self.cbItems)#添加下拉选项
+        self.cbItems = ["Drop-down to Select Model", "Cube"]
+        self.cb.addItems(self.cbItems)
         self.le=QLineEdit()
         self.layout1=QHBoxLayout()
         self.layout1.addWidget(self.label1, 2)
@@ -30,11 +29,11 @@ class ModelWizardWidget(QWidget):
         self.le4=QLineEdit()
         self.le5=QLineEdit()
         self.le6=QLineEdit()
-        #第二行
+        
         self.tableWidget=QTableWidget()
-        self.tableWidget.horizontalHeader().setVisible(0)#行表头不可见
-        self.tableWidget.verticalHeader().setVisible(0)#列表头不可见
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch);#平分长度
+        self.tableWidget.horizontalHeader().setVisible(0)
+        self.tableWidget.verticalHeader().setVisible(0)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(4)
         self.tableWidget.setItem(0, 0, QTableWidgetItem(" "))
@@ -48,7 +47,7 @@ class ModelWizardWidget(QWidget):
         self.tableWidget.item(2, 0).setFlags(Qt.NoItemFlags)
         self.tableWidget.setItem(3, 0, QTableWidgetItem("Z-Range"))
         self.tableWidget.item(3, 0).setFlags(Qt.NoItemFlags)
-        #设置控件
+        
         self.tableWidget.setCellWidget(1, 1, self.le1)
         self.tableWidget.setCellWidget(1, 2, self.le2)
         self.tableWidget.setCellWidget(2, 1, self.le3)
@@ -65,10 +64,7 @@ class ModelWizardWidget(QWidget):
         layout.addStretch(1)
         self.setLayout(layout)
         
-        #信号槽
         self.cb.currentIndexChanged.connect(self.lineChanged)
-        #parent.SIGNAL_data.connect(self.ModelData)
-        
         
     def lineChanged(self):
         id = self.cb.currentIndex()
@@ -80,7 +76,7 @@ class ModelWizardWidget(QWidget):
             self.le4=QLineEdit()
             self.le5=QLineEdit()
             self.le6=QLineEdit()
-            tableWidget.clearContents()#移除所有控件
+            tableWidget.clearContents()
             tableWidget.setColumnCount(3)
             tableWidget.setRowCount(4)
             tableWidget.setItem(0, 0, QTableWidgetItem(" "))
@@ -94,7 +90,7 @@ class ModelWizardWidget(QWidget):
             tableWidget.item(2, 0).setFlags(Qt.NoItemFlags)
             tableWidget.setItem(3, 0, QTableWidgetItem("Z-Range"))
             tableWidget.item(3, 0).setFlags(Qt.NoItemFlags)
-            #设置控件
+            
             tableWidget.setCellWidget(1, 1, self.le1)
             tableWidget.setCellWidget(1, 2, self.le2)
             tableWidget.setCellWidget(2, 1, self.le3)
@@ -103,23 +99,3 @@ class ModelWizardWidget(QWidget):
             tableWidget.setCellWidget(3, 2, self.le6)
             tableWidget.setItem(0, 0, QTableWidgetItem("unit:m"))
             tableWidget.item(0, 0).setFlags(Qt.NoItemFlags)
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
