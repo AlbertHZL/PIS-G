@@ -6,12 +6,12 @@ class DialogThreeViews(QDialog):
     def __init__(self, parent, number, index):
         super(DialogThreeViews, self).__init__(parent)
         self.father = parent
-        #界面设计
+        
         label1 = QLabel("Painting Title:")
         self.title = QLineEdit()
         label2 = QLabel("ColorBar Title:")
         self.colorbarTitle = QLineEdit()
-        #布局
+        
         layout1 = QHBoxLayout()
         layout1.addStretch(1)
         layout1.addWidget(label1, 1)
@@ -23,7 +23,7 @@ class DialogThreeViews(QDialog):
         layout2.addWidget(label2, 1)
         layout2.addWidget(self.colorbarTitle, 1)
         layout2.addStretch(1)
-        #添加按钮
+        
         layoutBottom = QHBoxLayout()
         layoutBottom.addStretch(1)
         ok = QPushButton("OK", self)
@@ -41,9 +41,9 @@ class DialogThreeViews(QDialog):
         
         self.setLayout(layout)
         self.setWindowTitle("Input Information")
-        #去掉问号
+        
         self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint)
-        #信号槽
+        
         ok.clicked.connect(lambda:self.on_ok_clicked(number, index))
         cancel.clicked.connect(self.on_cancel_clicked)
         
@@ -62,5 +62,4 @@ class DialogThreeViews(QDialog):
             self.father.side(index)
         if number == 3:
             self.father.down(index)
-        self.close()
-        
+        self.close()      
