@@ -9,8 +9,8 @@ class DialogInversionRange(QDialog):
     def __init__(self, parent, tableWidget, flag,  index):
         super(DialogInversionRange, self).__init__(parent)
         self.father = parent
-        #绘制界面
-        label1 = QLabel("Please Fill in the Cube Density Range,Model Name,ColorBar Title.")#请填写立方体密度范围、模型名称、颜色条名称
+        
+        label1 = QLabel("Please Fill in the Cube Density Range,Model Name,ColorBar Title.")
         label2 = QLabel("lower limit:")
         label3 = QLabel("g/cm^3 upper limit:")
         label4 = QLabel("g/cm^3")
@@ -27,15 +27,15 @@ class DialogInversionRange(QDialog):
         label8.setText("Y axis unit:")
         self.cb1 = QComboBox(self)
         self.cbItems1 = ['m', 'km']
-        self.cb1.addItems(self.cbItems1)#添加下拉选项
+        self.cb1.addItems(self.cbItems1)
         self.cb2 = QComboBox(self)
         self.cbItems2 = ['m', 'km']
-        self.cb2.addItems(self.cbItems2)#添加下拉选项
+        self.cb2.addItems(self.cbItems2)
         
         
         ok = QPushButton("OK", self)
         cancel = QPushButton("Cancel", self)
-        #布局
+        
         layout1 = QHBoxLayout()
         layout1.addStretch(1)
         layout1.addWidget(label2, 1)
@@ -77,9 +77,9 @@ class DialogInversionRange(QDialog):
         
         self.setLayout(layout)
         self.setWindowTitle("Inversion Information")
-        #去掉问号
+        
         self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint)
-        #信号槽
+        
         ok.clicked.connect(lambda:self.on_ok_clicked(tableWidget, flag,  index))
         cancel.clicked.connect(self.on_cancel_clicked)
         
@@ -90,11 +90,11 @@ class DialogInversionRange(QDialog):
     def on_ok_clicked(self, tableWidget, flag,  index):
         bottom = self.bottom.text()
         top = self.top.text()
-        #判断是否输入
+        
         if bottom == "" or top == "":
             QMessageBox.information(self, "ATTENTION", "Please Input Necessary Data")
             return
-        #数据赋值
+        
         try:
             tableWidget.bottom = float(bottom)
             tableWidget.top = float(top)
@@ -104,14 +104,14 @@ class DialogInversionRange(QDialog):
         if float(bottom)>float(top):
             QMessageBox.information(self, "ATTENTION", "Wrong Range!")
             return
-        #判断x,y单位, 如果单位是km， 绘图的时候坐标需要/1000
+        
         xx = 1
         yy = 1
         if self.cbItems1[self.cb1.currentIndex()] == 'km':
             xx = 1000
         if self.cbItems2[self.cb2.currentIndex()] == 'km': 
             yy = 1000
-        #设置控件
+        
         mw = ModelWidget(self.father)
         mwTitle = self.title.text()
         mwColorBarTitle = self.colorbarTitle.text()
@@ -128,7 +128,6 @@ class DialogInversionRange(QDialog):
                     QMessageBox.information(self, "ATTENTION", "Model Name already exists")
                     return
         
-        # 判断重名
         order = 1
         flag1 = 0
         name_temp = mwTitle
@@ -147,13 +146,13 @@ class DialogInversionRange(QDialog):
             order = order + 1
         
         mw.mpl.setTitle(mwTitle)
-        #计算三维数组的最大/小值
+       
         minList = []
         maxList = []
         m_result = []
         zmax1 = 0
         type = "Inversion_Paint_parallel"
-        if flag == 0: #非线性
+        if flag == 0:
             m_result = tableWidget.m_result
             zmax1 = tableWidget.zmax
         
@@ -162,9 +161,8 @@ class DialogInversionRange(QDialog):
                 minList.append(min(m_result[i][j]))
                 maxList.append(max(m_result[i][j]))
             
-        #添加colorbar范围
         mw.mpl.setRange(min(minList), max(maxList))
-        #循环绘制图形
+        
         zmax = 0.0
         k = int(zmax1/1000)
         yu = zmax1-k*1000
@@ -186,11 +184,11 @@ class DialogInversionRange(QDialog):
                         ydown = tableWidget.my[0] / yy
                         yup = tableWidget.my[tableWidget.model_count-1] / yy
                         mw.mpl.paintCube( xlim, ylim, zlim,density, xdown, xup, ydown, yup, zmax, xx, yy)
-        #添加colorbar
+        
         if mwColorBarTitle == "":
             mwColorBarTitle = "density(g/cm^3)"
         mw.mpl.setColorbar(mwColorBarTitle)
-        #添加右键动作
+        
         xy = QAction("X-Y Profile", self)
         xz = QAction("X-Z Profile", self)
         yz = QAction("Y-Z Profile", self)
@@ -200,7 +198,7 @@ class DialogInversionRange(QDialog):
         xy.triggered.connect(lambda:self.xy(tableWidget, flag, index))
         xz.triggered.connect(lambda:self.xz(tableWidget, flag, index))
         yz.triggered.connect(lambda:self.yz(tableWidget, flag, index))
-        #加子窗口
+        
         sub = QMdiSubWindow()
         sub.setWindowIcon(QIcon(".\\image\\logo.png"))
         sub.setWidget(mw)
@@ -208,7 +206,7 @@ class DialogInversionRange(QDialog):
         mid=self.father.tab.currentWidget()
         mid.addSubWindow(sub)
         sub.show()
-        #文件树条目
+        
         selectedList = self.father.tree.selectedItems()
         for i in range(0, len(selectedList)):
             selectedList[i].setSelected(0)
