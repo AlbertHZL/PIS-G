@@ -12,7 +12,7 @@ class Wizard(QWizard):
         self.setGeometry(600, 250, 350, 350)
         self.father = parent
         self.linenumber = 0
-        #第一页
+        
         firstPage = QWizardPage()
         firstPage.setSubTitle("welcome")
         firstPage.setPixmap(QWizard.WatermarkPixmap, QPixmap(".\\image\\image.jpg"))
@@ -22,7 +22,7 @@ class Wizard(QWizard):
         layout1 = QVBoxLayout()
         layout1.addWidget(label)
         firstPage.setLayout(layout1)
-        #第二页
+        
         secondPage = QWizardPage()
         secondPage.setSubTitle("Choose File")
         self.lineEdit = QLineEdit()
@@ -36,7 +36,7 @@ class Wizard(QWizard):
         layout3.addStretch(5)
         layout3.setAlignment(layout, Qt.AlignCenter)
         secondPage.setLayout(layout3)
-        #第三页
+        
         thirdPage  = QWizardPage()
         thirdPage.setSubTitle("preview & choose")
         #self.tw = QTableWidget()
@@ -54,7 +54,7 @@ class Wizard(QWizard):
         layout2.addWidget(self.te, 3)
         layout2.addLayout(layout21, 1)
         thirdPage.setLayout(layout2)
-        #第四页
+        
         forthPage = QWizardPage()
         forthPage.setSubTitle("Fill in the Coordinate Name")
         tip=QLabel(self)
@@ -66,10 +66,9 @@ class Wizard(QWizard):
         layout4.addWidget(self.tableWidget, 9)
         forthPage.setLayout(layout4)
         
-        #数据传递变量
-        self.startrow=0#文件起始行
-        self.headTitle=["ZERO"]#表格表头
-        self.uplimit=0#起始行数据上限
+        self.startrow=0
+        self.headTitle=["ZERO"]
+        self.uplimit=0
         
         self.setWizardStyle(QWizard.ModernStyle)
         self.setPage(1, firstPage)
@@ -77,21 +76,19 @@ class Wizard(QWizard):
         self.setPage(3, thirdPage)
         self.setPage(4, forthPage)
         self.setStartId(1)
-        self.setWindowFlags(self.windowFlags()&~Qt.WindowContextHelpButtonHint)#设置没有帮助按钮
-        #信号槽
+        self.setWindowFlags(self.windowFlags()&~Qt.WindowContextHelpButtonHint)
         self.button.clicked.connect(self.chooseFile)
         self.currentIdChanged.connect(self.on_currentIdChanged)
         self.finished.connect(self.on_finished)
     def isFloot(self, s):
         try:
-            s = float(s) #此处更改想判断的类型
+            s = float(s)
         except TypeError:
             return False
         except ValueError:
             return False
         else:
-            return True
-            
+            return True            
     
     def chooseFile(self):
         name = QFileDialog.getOpenFileName(self, 'Open File', './', '*.txt *.xls')
@@ -169,7 +166,7 @@ class Wizard(QWizard):
                 td=QTextDocument(aa)
                 self.te.setDocument(td)
         if id==4 and self.le1.text()!="":
-            #第四页
+            
             fileName = self.lineEdit.text()
             data=[]
             if suffix!='xls' and suffix!='xlsx':
@@ -206,19 +203,19 @@ class Wizard(QWizard):
                     self.back()
                     self.back()
                     return
-            self.tableWidget.setColumnCount( len(data[0])+1)#设置列数
-            self.tableWidget.setRowCount(len(data)+1)#设置行数
+            self.tableWidget.setColumnCount( len(data[0])+1)
+            self.tableWidget.setRowCount(len(data)+1)
             self.tableWidget.horizontalHeader().setVisible(0)
             self.tableWidget.verticalHeader().setVisible(0)
             self.linenumber = len(data[0])+1
-            #设置表头
+            
             temp_header = []
             flag = 0
             with open(fileName, 'r') as f:
                 for i in range(0, int(self.le1.text())-1):
                     t = f.readline().rstrip('\n')
                     temp_header = t.rstrip().split(',')
-                    #满足文件头的要求
+                    
                     if len(temp_header) == len(data[0]):
                         flag = 1
                         for i in range(1,  len(data[0])+1):
@@ -239,21 +236,21 @@ class Wizard(QWizard):
             
             
     def on_finished(self):
-        #获取文件名
+        
         fileName = self.lineEdit.text()
-        #获取表格表头
+        
         for i in range(1, self.tableWidget.columnCount()):
             self.headTitle.append(self.tableWidget.item(0, i).text())
-        #获取当前页面
+        
         id = self.currentId()
         if id==4 and fileName!="":
-            #当前Tab页索引
+            
             position = self.father.tab.currentIndex()
-            #在self.father的tree加入root
+            
             root = self.father.tree.topLevelItem(position-1)
-            #起始行数值
+            
             self.startrow=int(self.le1.text())
-            #设置树上root为选中状态
+            
             selectedList = self.father.tree.selectedItems()
             for i in range(0, len(selectedList)):
                 selectedList[i].setSelected(0)
@@ -264,13 +261,12 @@ class Wizard(QWizard):
                 s+=1
                 title = 'File Data' + str(s)
             self.father.tree_record[root.text(0)][title]={'type':'FileData'}
-            #设置继承root的子目录
+            
             child = QTreeWidgetItem(root)
             child.setText(0, title)
             root.setExpanded(1)
             child.setSelected(1)
-            #子窗口
-            #读取文件数据
+           
             data=[]
             suffixList = fileName.split('.')
             suffix = suffixList[-1]
@@ -299,5 +295,4 @@ class Wizard(QWizard):
             self.father.tab.widget(position).addSubWindow(sub)
             sub.show()
             self.father.tab.widget(position).setActiveSubWindow(sub)
-            
-    
+ 
