@@ -160,7 +160,7 @@ class MainWindow(QMainWindow):
         try:
             child = self.tab.widget(position).activeSubWindow().windowTitle()
             self.index = child
-        except:
+        except AttributeError:
             return 0
         if child in self.tree_record[root]:
             if self.tree_record[root][child]['type'] != 'FileData' and self.tree_record[root][child]['type'] != 'ForwardingData':
@@ -690,13 +690,16 @@ class MainWindow(QMainWindow):
         
     def setXY(self):
         position = self.tab.currentIndex()
-        self.tableWidget = self.tab.widget(position).activeSubWindow().widget()
+        if self.checkDataPage(position) == 0:
+            QMessageBox.information(self, "Attention", "Please Choose Correct Window")
+            return
         if position==0:
             QMessageBox.information(self, "Attention", "Please Choose Correct Page")
             return
         if self.tree.topLevelItem(position-1).childCount() ==0:
             QMessageBox.information(self, "Attention", "No data page")
             return
+        self.tableWidget = self.tab.widget(position).activeSubWindow().widget()
         dialog = DialogSetXY(self)
         dialog.show()
     def sectionOp(self):
@@ -792,7 +795,7 @@ class MainWindow(QMainWindow):
         root = self.tree.topLevelItem(position-1).text(0)
         try:
             index = self.tab.widget(position).activeSubWindow().windowTitle()
-        except:
+        except AttributeError:
             QMessageBox.information(self, "Attention", "Please Choose Correct Page")
             return
         
@@ -943,7 +946,7 @@ class MainWindow(QMainWindow):
         position = self.tab.currentIndex()
         try:
             index = self.tab.widget(position).activeSubWindow().windowTitle()
-        except:
+        except AttributeError:
             QMessageBox.information(self, "Attention", "Please Choose Correct Page")
             return
         if position == 0:
