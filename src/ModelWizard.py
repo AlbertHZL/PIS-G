@@ -17,38 +17,29 @@ class ModelWizard(QWizard):
         self.setGeometry(600, 250, 350, 350)
         self.flag = [0, 0, 0]
         self.father = parent
-        #储存中间Page
         self.tablePage = []
-        #存储每一页面的xyz的上下限
         self.xrange = []
         self.yrange = []
         self.zrange = []
-        #正演数据
         self.information = ""
-        #储存每个模型的数据
         self.data=[]
-        #第一页的数据
         self.xlow = 0
         self.xhigh = 0
         self.dx = 0
         self.ylow = 0
         self.yhigh = 0
         self.dy = 0
-        #z轴最深
         self.zmax = 0
-        #密度的最大最小值
         self.densityMin = 0
         self.densityMax = 0
-        #三视图的图名和color名
         self.title = []
         self.colorbarTitle = []
-        #第几次从初始页面进入
         self.times = 0
-        #第一页
+        
         firstPage = QWizardPage()
         firstPage.setSubTitle("welcome")
         firstPage.setPixmap(QWizard.WatermarkPixmap, QPixmap(".\\image\\image.jpg"))
-        firstPage.setCommitPage(1)#设置第二页没有back功能
+        firstPage.setCommitPage(1)
         label = QLabel()
         label.setText("Welcome to the Modeling Information Collection\n Wizard.This wizard will build a cube model \nbased on the information you provide. \n\n")
         label.setAlignment(Qt.AlignCenter)
@@ -57,17 +48,17 @@ class ModelWizard(QWizard):
         label2.setText("Number of Model:")
         label2.setAlignment(Qt.AlignCenter)
         self.lineEdit = QLineEdit()
-        #获取三维模型Title及colorbarTitle
+        
         label3 = QLabel()
         label3.setText("Figure Title:")
-        self.le1 = QLineEdit()#获取模型名称
+        self.le1 = QLineEdit()
         label4 = QLabel()
         label4.setText("ColorBar Title:")
-        self.le2 = QLineEdit()#获取colorbar名称
+        self.le2 = QLineEdit()
         label5 = QLabel()
         label5.setText("Observation Height:")
         label5_unit = QLabel("m")
-        self.le3 = QLineEdit() #获取观测高度
+        self.le3 = QLineEdit()
         
         layoutInFirstUp = QHBoxLayout()
         layoutInFirstUp.addStretch(1)
@@ -154,7 +145,7 @@ class ModelWizard(QWizard):
         layoutFirst.addLayout(ylayout, 1)
         layoutFirst.addStretch(2)
         firstPage.setLayout(layoutFirst)
-        #第二页--数据收集
+        
         secondPage= QWizardPage()
         secondPage.setTitle("Model Information Collection")
         secondPage.setSubTitle("No."+str(1)+" Model")
@@ -163,7 +154,7 @@ class ModelWizard(QWizard):
         layoutSecond=QVBoxLayout()
         layoutSecond.addWidget(table)
         secondPage.setLayout(layoutSecond)
-        #最后一页
+        
         self.finalPage = QWizardPage()
         self.finalPage.setTitle("Model Information Preview")
         layout = QVBoxLayout()
@@ -175,8 +166,7 @@ class ModelWizard(QWizard):
         self.setPage(1, firstPage)
         self.setPage(2, secondPage)
         self.setStartId(1)
-        self.setWindowFlags(self.windowFlags()&~Qt.WindowContextHelpButtonHint)#设置没有帮助按钮
-        #信号槽
+        self.setWindowFlags(self.windowFlags()&~Qt.WindowContextHelpButtonHint)
         self.SIGNAL_data.connect(self.ModelData)
     
     def validateCurrentPage(self):
@@ -215,11 +205,9 @@ class ModelWizard(QWizard):
                 self.times-=1
                 return 0
             for i in range(1, modelNumber):
-                #信息收集页
                 dataCollectPage = QWizardPage()
                 dataCollectPage.setTitle("Model Information Collection")
                 dataCollectPage.setSubTitle(""+str(i+1)+"th Model")
-                #dataCollectPage.setPixmap(QWizard.WatermarkPixmap, QPixmap(".\\image\\tower.jpg"))
                 table = ModelWizardWidget()
                 self.tablePage.append(table)
                 layoutSecond=QVBoxLayout()
@@ -232,7 +220,6 @@ class ModelWizard(QWizard):
                 self.finalPage.setSubTitle("1 model in total")
             self.addPage(self.finalPage)
             
-            #循环检测数据收集页面是否输入数据
         for i in range(0, modelNumber-1):
             if id == i+2:
                 temp = self.tablePage[i].le.text()
@@ -243,12 +230,12 @@ class ModelWizard(QWizard):
                 temp5=self.tablePage[i].le5.text()
                 temp6=self.tablePage[i].le6.text()
                 cbPosition = self.tablePage[i].cb.currentIndex()
-                #检测是否输入数据
+                
                 if temp == "" or temp1 == "" or temp2 == "" or temp3 == ""\
                 or temp4 == "" or temp5 == "" or temp6 == "":
                     QMessageBox.information(self, "Attention", "Please Enter Relevant Data")
                     return 0
-                #检测数据是否合理
+                
                 try:
                     float(temp)
                     if float(temp1)>=float(temp2):
@@ -263,11 +250,11 @@ class ModelWizard(QWizard):
                 except ValueError:
                     QMessageBox.information(self, "Attention", "Please enter the correct data.")
                     return 0
-                #检测是否选择下拉菜单
+                
                 if cbPosition == 0:
                     QMessageBox.information(self, "Attention", "Please Select the Model Shape")
                     return 0
-                #碰撞检测
+                
                 if id > 2:
                     for j in range(0, i):
                         if self.xrange[j][1]<=float(temp1) or float(temp2)<=self.xrange[j][0]:
@@ -278,8 +265,7 @@ class ModelWizard(QWizard):
                             continue
                         QMessageBox.information(self, "Attention", "This model collides with the "+str(j+1)+"th model. Please reenter the data.")
                         return 0
-                            
-                #记录xyz范围
+                
                 xx=[]
                 xx.append(float(temp1))
                 xx.append(float(temp2))
@@ -293,7 +279,6 @@ class ModelWizard(QWizard):
                 zz.append(float(temp6))
                 self.zrange.append(zz)
         if modelNumber != 0 and id == 1+modelNumber:
-            #最后一页的前一页————预览页
             i = id-2
             temp = self.tablePage[i].le.text()
             temp1=self.tablePage[i].le1.text()
@@ -303,12 +288,12 @@ class ModelWizard(QWizard):
             temp5=self.tablePage[i].le5.text()
             temp6=self.tablePage[i].le6.text()
             cbPosition = self.tablePage[i].cb.currentIndex()
-            #检测数据是否输入
+           
             if temp == "" or temp1 == "" or temp2 == "" or temp3 == ""\
             or temp4 == "" or temp5 == "" or temp6 == "":
                 QMessageBox.information(self, "Attention", "Please Enter Relevant Data")
                 return 0
-            #检测数据是否合理
+            
             try:
                 float(temp)
                 if float(temp1)>=float(temp2):
@@ -323,11 +308,11 @@ class ModelWizard(QWizard):
             except ValueError:
                 QMessageBox.information(self, "Attention", "Please enter the correct data.")
                 return 0
-            #检测是否选择下拉菜单
+            
             if cbPosition == 0:
                 QMessageBox.information(self, "Attention", "Please Select the Model Shape")
                 return 0
-            #碰撞检测
+           
             if i > 0:
                 for j in range(0, i):
                     if self.xrange[j][1]<=float(temp1) or float(temp2)<=self.xrange[j][0]:
@@ -339,7 +324,7 @@ class ModelWizard(QWizard):
                     QMessageBox.information(self, "Attention", "This model collides with the "+str(j+1)+"th model. Please reenter the data.")
                     return 0
             self.SIGNAL_data.emit()
-            #获取数据
+           
             self.data.clear()
             for i in range(0, modelNumber):
                 self.data.append(self.tablePage[i].aa)
@@ -352,12 +337,12 @@ class ModelWizard(QWizard):
                 showLabelString = showLabelString + "Z-Range:[" + self.data[i][3] +"](m) "
                 showLabelString = showLabelString + "Residual density：" + self.data[i][4] +"g/cm^3"
                 showLabelString += "\n"
-            #设置标签
+            
             self.information += showLabelString
             self.showLabel.setText(showLabelString)
             self.showLabel.setAlignment(Qt.AlignLeft)
             return 1
-        #finished
+        
         if self.currentPage().nextId() == -1:
             self.on_finished()
         return 1
@@ -369,9 +354,9 @@ class ModelWizard(QWizard):
         self.ylow = float(self.yle1.text())
         self.yhigh = float(self.yle2.text())
         self.dy = float(self.yle3.text())
-        #根据self.data中数据画图
+        
         if len(self.data)==0: return
-        #计算xy上下限
+        
         xlow = float(self.xle1.text())
         xhigh = float(self.xle2.text())
         xdistance = float(self.xle3.text())
@@ -380,7 +365,7 @@ class ModelWizard(QWizard):
         ydistance = float(self.yle3.text())
         model_Number = int(self.lineEdit.text())
         Observation_height  = float(self.le3.text())
-        #第二个子窗口---3D模型
+        
         mw = ModelWidget(self)
         mwTitle = self.le1.text()
         mwColorBarTitle = self.le2.text()
@@ -390,20 +375,20 @@ class ModelWizard(QWizard):
         c=[]
         b=[]
         a=[]
-        flag=0#标注是否有立方体
+        flag=0
         zmax = 0
-        #收集density数据
+        
         for i in range(0, len(self.data)):
             if self.data[i][0]=="Cube":
-                density = float(self.data[i][4])#密度
+                density = float(self.data[i][4])
                 densityData.append(density)
-        #设置colorbar上下限
+        
         self.densityMax = max(densityData)
         self.densityMin = min(densityData)
         if self.densityMax==self.densityMin:    
             self.densityMax+=1
         mw.mpl.setRange(self.densityMin, self.densityMax)
-        #循环绘制
+        
         for i in range(0, len(self.data)):
             if self.data[i][0]=="Cube":
                 flag=1
@@ -416,7 +401,7 @@ class ModelWizard(QWizard):
                 zlim = self.data[i][3].split(',')
                 if len(zlim)==1:
                     zlim = self.data[i][3].split('，')
-                density = float(self.data[i][4])#密度
+                density = float(self.data[i][4])
                 tem = []
                 tem.append(float(zlim[0]))
                 tem.append(float(zlim[1]))
@@ -438,11 +423,11 @@ class ModelWizard(QWizard):
                         zmax = k*1000
                 mw.mpl.paintCube(xlim, ylim, zlim, density, xlow-xdistance/2, xhigh+xdistance/2, ylow-ydistance/2, yhigh+ydistance/2, zmax, 1, 1)
         self.zmax = zmax
-        #添加colorbar
+        
         if mwColorBarTitle == "":
             mwColorBarTitle="density(g/cm^3)"
         mw.mpl.setColorbar(mwColorBarTitle)
-        #添加右键事件
+        
         frontView = QAction("X-Z Profile", self)
         sideView = QAction("Y-Z Profile", self)
         downView = QAction("X-Y Profile", self)
@@ -450,8 +435,6 @@ class ModelWizard(QWizard):
         mw.mpl.menu.addAction(sideView)
         mw.mpl.menu.addAction(downView)
         
-        #第一个子窗口
-        #计算X、Y的数组
         x = []
         y = []
         nx = int((xhigh-xlow)/xdistance)+1
@@ -462,8 +445,6 @@ class ModelWizard(QWizard):
         for i in range(0, ny):
             y.append(ylow+i*ydistance)
         
-        #int lx, int ly, int point_count, int prism_count, double x_min, double dx, double x_max,
-        #double y_min, double dy, double y_max, double z_obs, double* x, double* y, double* mx, double* my, double* mz, double* p
         mx = [0 for x in range(0,2*model_Number)]
         my = [0 for x in range(0,2*model_Number)]
         mz = [0 for x in range(0,2*model_Number)]
@@ -507,8 +488,8 @@ class ModelWizard(QWizard):
         Objdll = ll("./Forwarding_DLL.dll") 
         func = Objdll.Forwarding
         func.argtypes = (c_int, c_int,c_int,c_int, c_double,c_double,c_double,c_double,c_double, c_double,  c_double, \
-        POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double)) #设置函数参数类型
-        func.restype  = POINTER(c_double) #设置返回值类型为 double*
+        POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double))
+        func.restype  = POINTER(c_double)
         
         data_result = []
         data_result = Objdll.Forwarding(NX, NY, POINT_COUNT, MODEL_NUMBER, XLOW, XDISTANCE, XHIGH, YLOW, YDISTANCE,\
@@ -528,17 +509,13 @@ class ModelWizard(QWizard):
         if flag == 1:
             headTitle=['0', 'Vxx', 'Vxy', 'Vxz', 'Vyy', 'Vyz', 'Vzz', 'Vz', 'X', 'Y']
         tableWidget = TableWidget(self.father, F_Data, headTitle, 0, 0)
-        #传递正演数据
         tableWidget.forwardingInformation = tableWidget.forwardingInformation + "X-Range:"+str(xlow)+"m-"+str(xhigh)+"m  dx"+str(xdistance)+"m\n"
         tableWidget.forwardingInformation = tableWidget.forwardingInformation + "Y-Range:"+str(ylow)+"m-"+str(yhigh)+"m  dy"+str(ydistance)+"m\n"
         tableWidget.forwardingInformation = tableWidget.forwardingInformation + "Observation height:"+str(Observation_height)+"m\n"
         tableWidget.forwardingInformation = tableWidget.forwardingInformation + self.information
-        
-        #当前Tab页索引
+       
         position = self.father.tab.currentIndex()
-        #在self.father的tree加入root
         root = self.father.tree.topLevelItem(position-1)
-        # s 记录根节点的名字
         s = root.text(0)
         title = 'Data'
         num = 0
@@ -556,11 +533,9 @@ class ModelWizard(QWizard):
         self.father.tab.widget(position).addSubWindow(sub)
         self.father.tab.widget(position).setActiveSubWindow(sub)
         sub.show()
-        #设置树上root为选中状态
         selectedList = self.father.tree.selectedItems()
         for i in range(0, len(selectedList)):
             selectedList[i].setSelected(0)
-        #记录在 tree_record 中
         self.father.tree_record[s][title]={}
         self.father.tree_record[s][title]={'Number_of_Model':str(self.lineEdit.text()), \
         'Model_Title':str(mwTitle), 'ColorBar_Title':str(mwColorBarTitle),'Observation_height':str(self.le3.text()), \
@@ -573,12 +548,10 @@ class ModelWizard(QWizard):
             self.father.tree_record[s][title][name_temp] ={}
             for j in range(0, len(self.data[i])):
                 self.father.tree_record[s][title][name_temp][str(j)] = str(self.data[i][j])
-        #设置继承root的子目录
         child1 = QTreeWidgetItem(root)
         child1.setText(0, title)
         child1.setSelected(1)
         root.setExpanded(1)
-        #标注Flag
         return
         
     def ModelData(self):
@@ -617,7 +590,6 @@ class ModelWizard(QWizard):
         if title == "": title = "X-Z Profile"
         tvw.mpl.setTitle(title)
         tvw.mpl.setRange(self.densityMin, self.densityMax)
-        #计算xy上下限    
         xlow = self.xlow
         xhigh = self.xhigh
         dx = self.dx
@@ -637,7 +609,6 @@ class ModelWizard(QWizard):
         if colorbarTitle == "":
             colorbarTitle="density(g/cm^3)"
         tvw.mpl.setColorbar(colorbarTitle)
-        #加子窗口
         sub3 = QMdiSubWindow()
         sub3.setWindowIcon(QIcon(".\\image\\logo.png"))
         sub3.setWidget(tvw)
@@ -645,7 +616,6 @@ class ModelWizard(QWizard):
         mid=self.father.tab.currentWidget()
         mid.addSubWindow(sub3)
         sub3.show()
-        #文件树条目
         selectedList = self.father.tree.selectedItems()
         for i in range(0, len(selectedList)):
             selectedList[i].setSelected(0)
@@ -653,15 +623,13 @@ class ModelWizard(QWizard):
         root = self.father.tree.topLevelItem(position-1)
         child3 = QTreeWidgetItem(root)
         child3.setText(0, title)
-        #更改 tree_record 的值
         child_name = 'view_'+str(self.father.paintCount[position-1]) 
         root_name = root.text(0)
         self.father.tree_record[root_name][child_name] ={'title':str(title),'type':'Forwarding_Paintint_XZ', \
         'color_Bar_Title':str(colorbarTitle),'index':index}
         self.father.paintCount[position-1] = self.father.paintCount[position-1] +1
         child3.setSelected(1)
-        root.setExpanded(1)
-        
+        root.setExpanded(1)      
         
     def side(self, index):
         if len(self.title)==0 or len(self.colorbarTitle)==0:
@@ -677,7 +645,6 @@ class ModelWizard(QWizard):
             title = "Y-Z Profile"
         tvw.mpl.setTitle(title)
         tvw.mpl.setRange(self.densityMin, self.densityMax)
-        #计算xy上下限 
         ylow = self.ylow
         yhigh = self.yhigh
         dy = self.dy
@@ -697,7 +664,6 @@ class ModelWizard(QWizard):
         if colorbarTitle == "":
             colorbarTitle = "density(g/cm^3)"
         tvw.mpl.setColorbar(colorbarTitle)
-        #加子窗口
         sub3 = QMdiSubWindow()
         sub3.setWindowIcon(QIcon(".\\image\\logo.png"))
         sub3.setWidget(tvw)
@@ -705,14 +671,12 @@ class ModelWizard(QWizard):
         mid=self.father.tab.currentWidget()
         mid.addSubWindow(sub3)
         sub3.show()
-        #文件树条目
         selectedList = self.father.tree.selectedItems()
         for i in range(0, len(selectedList)):
             selectedList[i].setSelected(0)
         position = self.father.tab.currentIndex()
         root = self.father.tree.topLevelItem(position-1)
         child3 = QTreeWidgetItem(root)
-        #更改 tree_record 的值
         child_name = 'view_'+str(self.father.paintCount[position-1]) 
         root_name = root.text(0)
         self.father.tree_record[root_name][child_name] ={'title':title,'type':'Forwarding_Paintint_YZ', \
@@ -736,7 +700,6 @@ class ModelWizard(QWizard):
             title ="X-Y Profile"
         tvw.mpl.setTitle(title)
         tvw.mpl.setRange(self.densityMin, self.densityMax)
-        #计算xy上下限    
         xlow = self.xlow
         xhigh = self.xhigh
         dx = self.dx
@@ -759,7 +722,6 @@ class ModelWizard(QWizard):
         if colorbarTitle == "":
             colorbarTitle ="density(g/cm^3)"
         tvw.mpl.setColorbar(colorbarTitle)
-        #加子窗口
         sub3 = QMdiSubWindow()
         sub3.setWindowIcon(QIcon(".\\image\\logo.png"))
         sub3.setWidget(tvw)
@@ -767,7 +729,6 @@ class ModelWizard(QWizard):
         mid=self.father.tab.currentWidget()
         mid.addSubWindow(sub3)
         sub3.show()
-        #文件树条目
         selectedList = self.father.tree.selectedItems()
         for i in range(0, len(selectedList)):
             selectedList[i].setSelected(0)
@@ -775,15 +736,10 @@ class ModelWizard(QWizard):
         root = self.father.tree.topLevelItem(position-1)
         child3 = QTreeWidgetItem(root)
         child3.setText(0, title)
-        #更改 tree_record 的值
         child_name = 'view_'+str(self.father.paintCount[position-1]) 
         root_name = root.text(0)
         self.father.tree_record[root_name][child_name] ={'title':title,'type':'Forwarding_Paintint_XY', \
         'color_Bar_Title':str(colorbarTitle),'index':index}
         self.father.paintCount[position-1] = self.father.paintCount[position-1] +1
         child3.setSelected(1)
-        root.setExpanded(1)
-    
-
-        
-        
+        root.setExpanded(1) 
