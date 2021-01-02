@@ -1,4 +1,3 @@
-#读入数据并进行计算
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -11,30 +10,26 @@ class DialogAlgorithm(QDialog):
     def __init__(self, parent=None):
         super(DialogAlgorithm, self).__init__(parent)
         self.father = parent
-        #设置控件              
-        # 11个参数
-        #lz, kmax
-        #z_obs, dz, zmax, m_min, m_max, epsilon, lambda, sigma
-        #Max_GPU_Number, nThreadPerBlock
-        label1 = QLabel("the number of divided layers:")# lz
-        label2 = QLabel("maximum number of iterations:")# kmax
-        label3 = QLabel("                       z_obs:")# z_obs
-        label4 = QLabel("m                         dz:")# dz
-        label4_ = QLabel("m     ")  #为末尾表示单位，无单位的为空格，后面同理
         
-        label5 = QLabel("                        zmax:")# zmax
-        label6 = QLabel("                       m_min:")# m_min
-        label7 = QLabel("g/cm^3                 m_max:")# m_max
-        label8= QLabel("g/cm^3               epsilon:")# epsilon
+        label1 = QLabel("the number of divided layers:")
+        label2 = QLabel("maximum number of iterations:")
+        label3 = QLabel("                       z_obs:")
+        label4 = QLabel("m                         dz:")
+        label4_ = QLabel("m     ")
+        
+        label5 = QLabel("                        zmax:")
+        label6 = QLabel("                       m_min:")
+        label7 = QLabel("g/cm^3                 m_max:")
+        label8= QLabel("g/cm^3               epsilon:")
         label8_ = QLabel("      ")
         
-        label9 = QLabel("                         miu:")# miu(lambda)
-        label10 = QLabel("                       sigma:")# sigma
-        label11 = QLabel("              Max_GPU_Number:")# Max_GPU_Number
-        label12 = QLabel("             nThreadPerBlock:")#nThreadPerBlock
+        label9 = QLabel("                         miu:")
+        label10 = QLabel("                       sigma:")
+        label11 = QLabel("              Max_GPU_Number:")
+        label12 = QLabel("             nThreadPerBlock:")
         label12_ = QLabel("      ")
         
-        label13 = QLabel("                          wn:")# wn
+        label13 = QLabel("                          wn:")
         label14 = QLabel("                             ")
         label14_le = QLabel(" ")
         label15 = QLabel("                             ")
@@ -174,11 +169,8 @@ class DialogAlgorithm(QDialog):
     def Calculation(self):
         tableWidget = self.father.tableWidget
         tableWidget.flag[0] = 1
-        #判断数据是否输入
+        
         try:
-        #lz, kmax
-        #z_obs, dz, zmax, m_min, m_max, epsilon, lambda, sigma
-        #Max_GPU_Number, nThreadPerBlock
             tableWidget.lz = int(self.le1.text())
             tableWidget.kmax = int(self.le2.text())
             tableWidget.z_obs = float(self.le3.text())
@@ -197,10 +189,9 @@ class DialogAlgorithm(QDialog):
             self.sinOut.emit(2)
             tableWidget.flag[0] = 0
             return 
-        #显示正在计算
+        
         self.father.status.showMessage("Computing...", 0)
         
-        #将每一列的数记录下来
         vzzPosition = 0
         xxPosition = tableWidget.xcol
         yyPosition = tableWidget.ycol
@@ -226,18 +217,10 @@ class DialogAlgorithm(QDialog):
         Objdll = ll("./grav_rfi_ompcuda.dll") 
         func = Objdll.foo
         
-        #int lz, kmax
-        #double z_obs, dz, zmax, m_min, m_max, epsilon, lambda, sigma
-        #double* zc, *thick, *Vzz, *x, *y
-        #int Max_GPU_Number, nThreadPerBlock
-        #double wn
-        
-        #lz, kmax
-        #z_obs, dz, zmax, m_min, m_max, epsilon, miu(lambda), sigma
         func.argtypes = (c_int, c_int,c_int,c_int,c_int,c_int, c_int, c_int, \
         c_double,c_double,c_double,c_double,c_double, c_double,  c_double,c_double, c_double , \
-        POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double)) #设置函数参数类型
-        func.restype  = POINTER(c_double) #设置返回值类型为 double*
+        POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_double))
+        func.restype  = POINTER(c_double)
         
         lx = 1
         ly = 1
@@ -251,8 +234,7 @@ class DialogAlgorithm(QDialog):
                 ly = ly+1
             else:
                 break;
-        
-        #记录一些tableWidget有关的数
+       
         xmin = float(tableWidget.x[0])
         xmax = float(tableWidget.x[0])
         ymin = float(tableWidget.y[0])
@@ -274,7 +256,6 @@ class DialogAlgorithm(QDialog):
         tableWidget.point_count = tableWidget.nx * tableWidget.ny
         tableWidget.model_count = tableWidget.nx * tableWidget.ny *tableWidget.nz
         
-        #计算tableWidget.mx,tableWidget.my,tableWidget.mz
         zc= []
         thick = []
         for i in range(0,  tableWidget.lz):
@@ -301,16 +282,12 @@ class DialogAlgorithm(QDialog):
         tableWidget.zc = zc
         tableWidget.thick = thick
         
-        #传参
-        #int h_point_count,  h_prism_count,  h_lx, h_ly,  h_lz,  h_kmax, 
-        
         Point_count = c_int(tableWidget.point_count)
         Prism_count = c_int(tableWidget.model_count)
         Lx = c_int(lx)
         Ly = c_int(ly)
         Lz = c_int(tableWidget.lz)
         Kmax = c_int(tableWidget.kmax)
-        #double h_z_obs,  h_dz,  h_zmax, h_m_min,  h_m_max,  h_epsilon,  h_lambda,  h_sigma
         Z_obs = c_double(tableWidget.z_obs)
         Dz = c_double(tableWidget.dz)
         Zmax = c_double(tableWidget.zmax)
@@ -319,16 +296,13 @@ class DialogAlgorithm(QDialog):
         Epsilon = c_double(tableWidget.epsilon)
         Miu = c_double(tableWidget.miu)
         Sigma = c_double(tableWidget.sigma)
-        #duoble * zc, thick,  Vzz,  x,  y
         Zc = POINTER(c_double)((c_double*len(zc))(*zc))
         Thick = POINTER(c_double)((c_double*len(thick))(*thick))
         Vzz = POINTER(c_double)((c_double*len(tableWidget.Vzz))(*tableWidget.Vzz))
         X = POINTER(c_double)((c_double*len(tableWidget.x))(*tableWidget.x))
         Y = POINTER(c_double)((c_double*len(tableWidget.y))(*tableWidget.y))
-        # int Max_GPU_Number, nThreadPerBlock
         MMax_GPU_Number = c_int(tableWidget.Max_GPU_Number)
         NThreadPerBlock = c_int(tableWidget.nThreadPerBlock)
-        # double wn
         Wn = c_double(tableWidget.wn)
         result = []
         try:
@@ -343,7 +317,7 @@ class DialogAlgorithm(QDialog):
         for i in range(0, tableWidget.model_count):
             temp_result.append(float(result[i]))
         tableWidget.m_result.clear()
-        #记录返回值
+        
         count = 0
         for i in range(0, tableWidget.nz):
             tempy = []
@@ -357,5 +331,4 @@ class DialogAlgorithm(QDialog):
         tableWidget.inversionFlag = 1
         self.sinOut.emit(1)
         tableWidget.flag[0] = 0
-        return
-        
+        return       
