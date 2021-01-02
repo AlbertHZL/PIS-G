@@ -7,9 +7,9 @@ class DialogNewPro(QDialog):
         super(DialogNewPro, self).__init__(parent)
         self.father = parent
         self.resize(350, 150)
-        # 设置控件
+        
         layout = QVBoxLayout()
-        # 第一个为 QGridLayout 排列
+        
         label = QLabel("Project Name",  self)
         self.le = QLineEdit(self)
         order= self.number()
@@ -18,7 +18,7 @@ class DialogNewPro(QDialog):
         layout1.addWidget(label,  3)
         layout1.addWidget(self.le, 5)
         layout.addLayout(layout1)
-        #按钮的 QHboxLayout 排列
+        
         layout3 = QHBoxLayout()
         ok = QPushButton("ok", self)
         cancel = QPushButton("Cancel",  self)
@@ -48,16 +48,15 @@ class DialogNewPro(QDialog):
         if pro_name in self.father.tree_record:
             QMessageBox.information(self, "Attention", "Project name already exists.")
             return 
-        # 添加tree和tree_record还有tab页
-        #在self.father的tree加入root
+        
         root = QTreeWidgetItem(self.father.tree)
-        #设置项目名称
+        
         root.setText(0, pro_name)
-        #记录 tree_record 及flag 记录
+        
         self.father.tree_record[pro_name]={}
-        # 初始值设为0
+        
         self.father.paintCount.append(0)
-        #设置标签页的控件
+        
         mdiAreaForTab = QMdiArea(self.father)
         self.father.tab.addTab(mdiAreaForTab, pro_name)
         self.father.tab.setCurrentWidget(mdiAreaForTab)
