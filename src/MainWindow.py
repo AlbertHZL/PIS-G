@@ -1,12 +1,3 @@
-'''
-该程序为在毛天笑学长的框架基础上进行一些功能的添加及一些细节的修改
-编译环境如下:
-window10 + python3.6 +eric6-19.10
-Pyqt5--5.13.2      xlrd--1.2.0        xlwt--1.3.0       xlutils--2.0.0
-matplotlib--3.1.2       numpy--1.17.4       pyqt5-tools--5.13.0.1.5     
-CUDA--10.2.89       CUDA Driver(Windows)>=441.22    CUDA Driver(Linux)>=440.33
-2020.1.14 wjk
-'''
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -19,11 +10,9 @@ from MatplotlibWidget import MatplotlibWidget
 from InversionSection import InversionSection
 from Matplotlib3DWidget import Matplotlib3DWidget
 from ThreeViewsWidget import ThreeViewsWidget
-# import xlrd
 import xlwt
 import json
 import os
-# from xlutils.copy import copy
 from DialogClose import DialogClose
 from DialogAlgorithm import DialogAlgorithm
 from Dialog3D import Dialog3D
@@ -38,7 +27,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent)  
         self.setWindowTitle("PIS-G")
         self.setWindowIcon(QIcon(".\\image\\logo.png"))
-        #加入菜单栏(文件&绘图)
+        
         bar = self.menuBar()
         file = bar.addMenu("&File(F)")
         newProject_Action = QAction("New project",  self)
@@ -88,28 +77,27 @@ class MainWindow(QMainWindow):
         setxy = bar.addMenu("&Coordinate(C)")
         setxyAction = QAction("Set X&&Y", self)
         setxy.addAction(setxyAction)
-        #记录树的结点的类型，保存工程用
+        
         self.tree_record = {}
-        #停靠窗口(加入树)
+        
         self.dockWidget = QDockWidget(self)
         w = QWidget()
         self.dockWidget.setTitleBarWidget(w)
         self.dockWidget.setAllowedAreas(Qt.LeftDockWidgetArea)
         self.dockWidget.setFeatures(QDockWidget.NoDockWidgetFeatures)
-        #文件树
+        
         self.tree = TreeWidget(self)
         self.tree.setColumnCount(1)
         self.tree.setHeaderLabels(['File List'])
         self.tree.setColumnWidth(0, 300)
-        self.dockWidget.setWidget(self.tree)#将文件树加入到停靠窗口
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)#将停靠窗口加入到主窗口
-        self.tab = QTabWidget()#主标签页
-        #标签开始页面
+        self.dockWidget.setWidget(self.tree)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
+        self.tab = QTabWidget()
+        
         self.start = QWidget(self)
         
         label = QLabel(self.start)
-        #label.setText("<p><font size=100 face=verdana color=red>Welcome !</font></p><br><h1><font size=100 face=verdana>重力梯度数据三维物性反演软件</font></h1>")#开始页面的欢迎语，需要再添加，或者再加图片
-        label.setText("<p><font size=100 face=verdana color=red style=font-weight:bold>Welcome !</font></p><br><h1><font size=100 face=verdana>Parallel Inversion Software of Gravity gradiometry data</font></h1>")#开始页面的欢迎语，需要再添加，或者再加图片
+        label.setText("<p><font size=100 face=verdana color=red style=font-weight:bold>Welcome !</font></p><br><h1><font size=100 face=verdana>Parallel Inversion Software of Gravity gradiometry data</font></h1>")
         layout1 = QHBoxLayout()
         layout1.addStretch()
         layout1.addWidget(label)
@@ -123,46 +111,39 @@ class MainWindow(QMainWindow):
 
         self.tab.addTab(self.start, "start")
         self.setCentralWidget(self.tab)
-        #记录用
-        #self.tableWidget 记录当前选定的 tableWidget 页面
         self.widg = {}
         self.tableWidget = QTabWidget()
         self.index = ""
-        #状态栏提示语
         self.status = self.statusBar()
-        #初始最大化显示
         self.showMaximized()
         
-        #打开文件数据
-        self.paintCount = [] #tree_record记录每个工程的子项用, 避免命名重复
+        self.paintCount = []
         
-        #设置信号槽
-        newProject_Action.triggered.connect(self.newpro)#新建工程
-        newFile.triggered.connect(self.openfile)#打开文件数据
-        Load_project.triggered.connect(self.openPr)#打开工程
-        Save_project.triggered.connect(self.savePr)#保存工程
-        Close_project.triggered.connect(self.closeOp)#关闭工程
-        Quit_Action.triggered.connect(self.quitOp)#退出
+        newProject_Action.triggered.connect(self.newpro)
+        newFile.triggered.connect(self.openfile)
+        Load_project.triggered.connect(self.openPr)
+        Save_project.triggered.connect(self.savePr)
+        Close_project.triggered.connect(self.closeOp)
+        Quit_Action.triggered.connect(self.quitOp)
         
-        sectionPaint.triggered.connect(self.sectionOp)#剖面图
-        gridPaint.triggered.connect(self.gridOp)#网格图
-        D3Paint.triggered.connect(self.D3Op)#3D图
+        sectionPaint.triggered.connect(self.sectionOp)
+        gridPaint.triggered.connect(self.gridOp)
+        D3Paint.triggered.connect(self.D3Op)
         
-        newModel.triggered.connect(self.buildModel)#建模
-        paintModel.triggered.connect(self.paintModel)#绘制
-        saveModel.triggered.connect(self.forwardingSave)#保存数据
+        newModel.triggered.connect(self.buildModel)
+        paintModel.triggered.connect(self.paintModel)
+        saveModel.triggered.connect(self.forwardingSave)
         
-        newInversion.triggered.connect(self.inversion)#反演计算  聚焦反演
-        paintInversion.triggered.connect(self.inversionPainting)#反演绘制
-        saveInversion.triggered.connect(self.inversionSave)#反演结果保存
+        newInversion.triggered.connect(self.inversion)
+        paintInversion.triggered.connect(self.inversionPainting)
+        saveInversion.triggered.connect(self.inversionSave)
         setxyAction.triggered.connect(self.setXY)
-        self.tree.clicked.connect(self.onTreeClicked)#点击树
-        self.tab.currentChanged.connect(self.onCurrentChanged)#点击Tab标签
+        self.tree.clicked.connect(self.onTreeClicked)
+        self.tab.currentChanged.connect(self.onCurrentChanged)
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Tips',"Are you sure you want to quit the program?",
                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            # 判断返回值，如果点击的是Yes按钮，我们就关闭组件和应用，否则就忽略关闭事件
         if reply == QMessageBox.No:
             event.ignore()
         else:
@@ -204,53 +185,40 @@ class MainWindow(QMainWindow):
         wizard = Wizard(self)
         wizard.show()
     
-    def openPr(self): # 读档
+    def openPr(self):
         filePath = QFileDialog.getOpenFileName(self, 'Choose File', './', '*.json')
         if filePath[0] == "":return
-        #判断文件是否存在
         if os.path.isfile(filePath[0]) == False :
             QMessageBox.information(self, "Attention", "Json does not exist")
             return
-        #先复原工程及页面，再复原每个子项
-        #复原工程时会关闭现有的所有工程
-        #清空tab页, 除了start页面
+        
         self.tab.clear()
         self.tab.addTab(self.start, "start")
         self.setCentralWidget(self.tab)
-        #清空记录数组及左边树
         self.tree.clear()
         self.widg.clear()
         self.tree_record.clear()
         self.paintCount.clear()
-        #导入json文件数据，先不考虑数据损坏的情况
         with open(filePath[0], 'r', encoding = 'utf-8') as json_file:
             jsObj = json.load(json_file)
-            #将存档中的tree和table读进来
             for i in jsObj['TableWidget']:
                 self.widg[i] = jsObj['TableWidget'][i]
             for i in jsObj['TreeWidget']:
                 self.tree_record[i] = jsObj['TreeWidget'][i]
         self.paintCount = self.widg['paintCount']
-        #构建左边树的根项目及 tab 页 , widg 和 tree_record 共享字典名称
         position = 1
         for key, value in self.tree_record.items():
-            # 导入工程
             root = QTreeWidgetItem(self.tree)
-            #设置项目名称
             root.setText(0, key)
             mid = QMdiArea()
             self.tab.addTab(mid, key)
             self.tab.setCurrentWidget(mid)
             count = 0
-            #添加具体子窗口
-            # key1 就是 title
+           
             for key1, value1 in self.tree_record[key].items():
-                # 数据页
                 if self.tree_record[key][key1]['type']=='FileData' or self.tree_record[key][key1]['type']=='ForwardingData':
-                    # 子节点
                     child = QTreeWidgetItem(root)
                     child.setText(0, key1)
-                    # 导入数据
                     data = []
                     for list_x in range(0,  len(self.widg[key][key1]['data'])):
                         tempx = []
@@ -261,10 +229,6 @@ class MainWindow(QMainWindow):
                     xcol = int(self.widg[key][key1]['xcol'])
                     ycol = int(self.widg[key][key1]['ycol'])
                     tableWidget = TableWidget(self, data, headTitle, xcol, ycol)
-                    #导入 tableWidget 的所有数据
-                    #lz, kmax
-                    #z_obs, dz, zmax, m_min, m_max, epsilon, miu, sigma,wn
-                    #Max_GPU_Number, nThreadPerBlock
                     tableWidget.data = data
                     tableWidget.forwardingInformation = self.widg[key][key1]['forwardingInformation']
                     tableWidget.bottom = float(self.widg[key][key1]['bottom'])
@@ -283,7 +247,6 @@ class MainWindow(QMainWindow):
                     tableWidget.miu = float(self.widg[key][key1]['miu'])
                     tableWidget.sigma = float(self.widg[key][key1]['sigma'])
                     tableWidget.wn = float(self.widg[key][key1]['wn'])
-                    
                     tableWidget.model_count = int(self.widg[key][key1]['model_count'])
                     tableWidget.point_count = int(self.widg[key][key1]['point_count'])
                     tableWidget.dx = float(self.widg[key][key1]['dx'])
@@ -291,7 +254,6 @@ class MainWindow(QMainWindow):
                     tableWidget.nx = int(self.widg[key][key1]['nx'])
                     tableWidget.ny = int(self.widg[key][key1]['ny'])
                     tableWidget.nz = int(self.widg[key][key1]['nz'])
-                    #添加储存的数组数据
                     tableWidget.mx = self.widg[key][key1]['mx']
                     tableWidget.my = self.widg[key][key1]['my']
                     tableWidget.mz = self.widg[key][key1]['mz']
@@ -303,7 +265,6 @@ class MainWindow(QMainWindow):
                     for i in range(0, len(tableWidget.data)):
                         tableWidget.x.append(float(tableWidget.data[i][tableWidget.xcol-1]))
                         tableWidget.y.append(float(tableWidget.data[i][tableWidget.ycol-1]))
-                    # 上方 tab 页
                     sub1 = QMdiSubWindow()
                     sub1.setWindowIcon(QIcon(".\\image\\logo.png"))
                     sub1.setWidget(tableWidget)
@@ -312,7 +273,6 @@ class MainWindow(QMainWindow):
                     mid.addSubWindow(sub1)
                     mid.setActiveSubWindow(sub1)
                     sub1.show()
-                    # 正演产生数据需要额外处理
                     if self.tree_record[key][key1]['type']=='ForwardingData':
                         zmax = 0
                         mwd = ModelWizard(self)
@@ -337,10 +297,9 @@ class MainWindow(QMainWindow):
                             for j in range(0, 5):
                                 aa.append(self.tree_record[key][key1][Forwarding_tempname][str(j)])
                             mwd.data.append(aa)
-                        # density 数据
                         for i in range(0, len(mwd.data)):
                             if mwd.data[i][0]=="Cube":
-                                density = float(mwd.data[i][4])#密度
+                                density = float(mwd.data[i][4])
                                 densityData.append(density)
                         mwd.densityMin = min(densityData)
                         mwd.densityMax = max(densityData)
@@ -357,7 +316,7 @@ class MainWindow(QMainWindow):
                                 zlim = mwd.data[i][3].split(',')
                                 if len(zlim)==1:
                                     zlim = mwd.data[i][3].split('，')
-                                density = float(mwd.data[i][4])#密度
+                                density = float(mwd.data[i][4])
                                 if zmax < float(zlim[1]):
                                     k = int(float(zlim[1])/1000)
                                     yu = float(zlim[1])-k*1000
@@ -368,7 +327,6 @@ class MainWindow(QMainWindow):
                                 mw.mpl.paintCube(xlim, ylim, zlim, density, mwd.xlow-mwd.xdistance/2, mwd.xhigh+mwd.xdistance/2, mwd.ylow-mwd.ydistance/2, mwd.yhigh+mwd.ydistance/2, zmax, 1, 1)
                         mwd.zmax = zmax
                         mw.mpl.setColorbar(mwd.colorbarTitle)
-                        #添加右键事件
                         frontView = QAction("X-Z Profile", mwd)
                         sideView = QAction("Y-Z Profile", mwd)
                         downView = QAction("X-Y Profile", mwd)
@@ -404,9 +362,7 @@ class MainWindow(QMainWindow):
                         x.append(tableWidget.data[i][xposition-1])
                     if xunit == 'km':
                         x = [i / 1000 for i in x]
-                    # 1 表示当前显示 Line 1 的测线
                     mw.mpl.section(1, fileName, x, y, xunit, vunit, flag)
-                    #添加子窗口
                     sub = QMdiSubWindow()
                     sub.setWindowIcon(QIcon(".\\image\\logo.png"))
                     sub.setWidget(mw)
@@ -414,7 +370,6 @@ class MainWindow(QMainWindow):
                     self.tab.widget(position).addSubWindow(sub)
                     self.tab.widget(position).setActiveSubWindow(sub)
                     sub.show()
-                    #添加子树
                     newItem = QTreeWidgetItem(root)
                     newItem.setText(0, finalName)
                 elif self.tree_record[key][key1]['type'] == 'Paint_Gird':
@@ -444,14 +399,12 @@ class MainWindow(QMainWindow):
                         y = [i / 1000 for i in y]
                     mw = MatplotlibWidget()
                     mw.mpl.gridPaint(fileName, x, y, z, xunit, yunit, colorbarTitle, flag1, flag2)
-                    #设置子窗口
                     sub = QMdiSubWindow()
                     sub.setWindowIcon(QIcon(".\\image\\logo.png"))
                     sub.setWidget(mw)
                     sub.setWindowTitle(finalName)
                     mid.addSubWindow(sub)
                     sub.show()
-                    #添加子树
                     newItem = QTreeWidgetItem(root)
                     newItem.setText(0, finalName)
                 elif self.tree_record[key][key1]['type'] == 'Paint_3D':
@@ -480,14 +433,12 @@ class MainWindow(QMainWindow):
                         y = [i / 1000 for i in y]
                     mw = Matplotlib3DWidget()
                     mw.mpl.D3Paint(fileName, x, y, z, xunit, yunit, zunit, colorbarTitle)
-                    #设置子窗口
                     sub = QMdiSubWindow()
                     sub.setWindowIcon(QIcon(".\\image\\logo.png"))
                     sub.setWidget(mw)
                     sub.setWindowTitle(finalName)
                     mid.addSubWindow(sub)
                     sub.show()
-                    #添加子树
                     newItem = QTreeWidgetItem(root)
                     newItem.setText(0, finalName)
                 elif self.tree_record[key][key1]['type'] == 'Forwarding_Painting':
@@ -547,7 +498,6 @@ class MainWindow(QMainWindow):
                             else:
                                 tvw.mpl.cubeDown(xlim, ylim, zlim, xlow-dx/2, xhigh+dx/2, ylow-dy/2, yhigh+dy/2, density)
                     tvw.mpl.setColorbar(colorbarTitle)
-                    #加子窗口
                     sub3 = QMdiSubWindow()
                     sub3.setWindowIcon(QIcon(".\\image\\logo.png"))
                     sub3.setWidget(tvw)
@@ -601,7 +551,6 @@ class MainWindow(QMainWindow):
                                     yup = tableWidget.my[tableWidget.model_count-1]/yy
                                     mw.mpl.paintCube(xlim, ylim, zlim,density, xdown, xup, ydown, yup, zmax, xx, yy)
                     mw.mpl.setColorbar(mwColorBarTitle)
-                    #添加右键动作
                     xy = QAction("X-Y Profile", DIR)
                     xz = QAction("X-Z Profile", DIR)
                     yz = QAction("Y-Z Profile", DIR)
@@ -611,7 +560,6 @@ class MainWindow(QMainWindow):
                     xy.triggered.connect(lambda:DIR.xy(tableWidget), flag)
                     xz.triggered.connect(lambda:DIR.xz(tableWidget), flag)
                     yz.triggered.connect(lambda:DIR.yz(tableWidget), flag)
-                    #加子窗口
                     sub = QMdiSubWindow()
                     sub.setWindowIcon(QIcon(".\\image\\logo.png"))
                     sub.setWidget(mw)
@@ -619,7 +567,6 @@ class MainWindow(QMainWindow):
                     mid=self.tab.currentWidget()
                     mid.addSubWindow(sub)
                     sub.show()
-                    #树
                     child3 = QTreeWidgetItem(root)
                     child3.setText(0, mwTitle)
                     
@@ -672,7 +619,6 @@ class MainWindow(QMainWindow):
                                 temp.append(tableWidget.m_result[i][j][id])
                             x.append(temp)
                         inversionSection.mpl.yz_section(y1, y2, z1, z2, x, dx, dy, dz, depth, inversionColorbarTitle, yy)
-                    #加子窗口
                     sub = QMdiSubWindow()
                     sub.setWindowIcon(QIcon(".\\image\\logo.png"))
                     sub.setWidget(inversionSection)
@@ -686,14 +632,13 @@ class MainWindow(QMainWindow):
             root.setExpanded(1)
             position = position+1
         return
-    def savePr(self):   #存档
+    def savePr(self):
         if self.tab.count()==0:
             QMessageBox.information(self, "Attention", "No data to save")
             return
         filePath = QFileDialog.getSaveFileName(self, 'Open File', './', '*.json')
         if filePath[0] == "":
             return
-        #记录每个tablewidget的所有值
         sum_i = 1
         self.widg.clear()
         if os.path.isfile(filePath[0]) == True: 
@@ -706,22 +651,16 @@ class MainWindow(QMainWindow):
                 if self.tree_record[key][key1]['type'] == 'ForwardingData':
                     self.tree_record[key][key1]['ForwardingModel'] = 0
         while sum_i <= self.tree.topLevelItemCount():
-            #没有子项的话这一项不用记录
             if self.tree.topLevelItem(sum_i-1).childCount() ==0:
                 continue
             root = self.tree.topLevelItem(sum_i-1).text(0)
             sum_j = 0
             self.widg[root] = {}
             for key,  value in self.tree_record[root].items():
-                # 判断是否为数据页
                 if self.tree_record[root][key]['type'] != 'FileData' and self.tree_record[root][key]['type'] != 'ForwardingData':
                     sum_j+=1
                     continue
-                #是数据页的话可以进行记录
-                #每一个table页要记录的数据
-                #lz, kmax
-                #z_obs, dz, zmax, m_min, m_max, epsilon, miu, sigma,wn
-                #Max_GPU_Number, nThreadPerBlock
+                
                 tableWidget = self.tab.widget(sum_i).subWindowList()[sum_j].widget()
                 name = self.tree.topLevelItem(sum_i-1).child(sum_j).text(0)
                 self.widg[root][name] ={'lieCount': tableWidget.lieCount,'hangCount':len(tableWidget.data),'forwardingInformation': tableWidget.forwardingInformation, \
@@ -737,15 +676,12 @@ class MainWindow(QMainWindow):
                 'Vzz':tableWidget.Vzz, 'm_result':tableWidget.m_result, 'thick':tableWidget.thick,'zc':tableWidget.zc}
                 sum_j+=1
             sum_i = sum_i+1
-        #之后记录左边数的情况
-        #保存tree_record即可
-        # 导入tableWidget的数据
+        
         name_emb = {'TableWidget':{}, 'TreeWidget':{}}
         for i in self.widg:
             name_emb['TableWidget'][i] = self.widg[i]
         for i in self.tree_record:
             name_emb['TreeWidget'][i] = self.tree_record[i]
-        #数据导入到文件中
         jsObj = json.dumps(name_emb)
         with open(os.path.join('./', filePath[0]), "w", encoding= 'utf-8') as fw:
             fw.write(jsObj)
@@ -792,13 +728,11 @@ class MainWindow(QMainWindow):
             return
         self.tableWidget = self.tab.widget(position).activeSubWindow().widget()
         self.index = self.tab.widget(position).activeSubWindow().windowTitle()
-        #绘制网格图
         dialog = DialogGrid(self)
         dialog.exec()
         
     def onTreeClicked(self):
         item = self.tree.currentItem()
-        #判断是不是顶级节点
         topCount = self.tree.topLevelItemCount()
         for i in range(0,  topCount):
             if self.tree.topLevelItem(i)==item:
@@ -809,7 +743,6 @@ class MainWindow(QMainWindow):
             if self.tree.topLevelItem(i)==item.parent():
                 root = self.tree.topLevelItem(i)
                 position = i
-                #子目录坐标
                 ind = root.indexOfChild(item)
                 self.tab.setCurrentIndex(position+1)
                 mdiarea = self.tab.widget(position+1)
@@ -882,7 +815,6 @@ class MainWindow(QMainWindow):
         mid.addSubWindow(sub2)
         mid.setActiveSubWindow(sub2)
         sub2.show()
-        #文件树条目
         selectedList = self.tree.selectedItems()
         for i in range(0, len(selectedList)):
             selectedList[i].setSelected(0)
@@ -891,7 +823,6 @@ class MainWindow(QMainWindow):
         child3.setText(0, index + "3D Model")
         child3.setSelected(1)
         root.setExpanded(1)
-        # 记录tree_record
         child_name = 'view_'+str(self.paintCount[position-1]) 
         self.tree_record[root_name][index]['ForwardingModelFlag'] = 1
         self.paintCount[position-1] += 1
@@ -929,13 +860,11 @@ class MainWindow(QMainWindow):
                 filename.write(str(tableWidget.data[i][len(tableWidget.data[0])-1]))
                 filename.write('\n')
             filename.close()
-            #保存参数
             parameterFilePath = suffixList[0]
             for i in range(1, len(suffixList)-1):
                 parameterFilePath=parameterFilePath+'.'+suffixList[i]
             parameterFilePath+="-parameter.txt"
             filename1 = open(parameterFilePath, 'w')
-            #存放参数及数据
             filename1.write(tableWidget.forwardingInformation)
             filename1.close()
         elif suffix=='xls':
@@ -945,13 +874,11 @@ class MainWindow(QMainWindow):
                 for j in range(0,len(tableWidget.data[0])):
                     sheet1.write(i, j, str(tableWidget.data[i][j]))
             f.save(filePath[0])
-            #保存参数
             parameterFilePath = suffixList[0]
             for i in range(1, len(suffixList)-1):
                 parameterFilePath=parameterFilePath+'.'+suffixList[i]
             parameterFilePath+="-parameter.txt"
             filename1 = open(parameterFilePath, 'w')
-            #存放参数及数据
             filename1.write(tableWidget.forwardingInformation)
             filename1.close()            
         else:
@@ -998,7 +925,6 @@ class MainWindow(QMainWindow):
             return
         self.tableWidget = self.tab.widget(position).activeSubWindow().widget()
         self.index = self.tab.widget(position).activeSubWindow().windowTitle()
-        #判断是否反演进行时
         if self.tableWidget.flag[0] == 1:
             QMessageBox.information(self, "Tips", "Calculation in progress")
             return 
@@ -1033,7 +959,6 @@ class MainWindow(QMainWindow):
         if self.tableWidget.inversionFlag == 0:
             QMessageBox.information(self, "Attention", "No Reweighted foucsing inversion Calculation")
             return
-        #输入范围
         dialogInversionRange = DialogInversionRange(self, self.tableWidget, 0,  index)
         dialogInversionRange.show()
         return
@@ -1067,15 +992,12 @@ class MainWindow(QMainWindow):
                         filename.write(str(tableWidget.m_result[i][j][k]))
                         filename.write('\n')
             filename.close()
-            #保存参数
             parameterFilePath = suffixList[0]
             for i in range(1, len(suffixList)-1):
                 parameterFilePath=parameterFilePath+'.'+suffixList[i]
             parameterFilePath+="-parameter.txt"
             filename1 = open(parameterFilePath, 'w')
-            #存放参数及数据
-            #lz,  kmax
-            #z_obs, dz, zmax, m_min, m_max, epsilon, lambda, sigma
+           
             filename1.write("the number of divided layers:"+str(tableWidget.lz)+"\n")
             filename1.write("maximum number of iterations:"+str(tableWidget.kmax)+"\n")
             filename1.write("z_obs:"+str(tableWidget.z_obs)+"m\n")
@@ -1098,13 +1020,11 @@ class MainWindow(QMainWindow):
                     for k in range(0, tableWidget.nx):
                         sheet1.write(i*tableWidget.nx*tableWidget.ny+j*tableWidget.nx+k, 0, str(tableWidget.m_result[i][j][k]))
             f.save(filePath[0])
-            #保存参数
             parameterFilePath = suffixList[0]
             for i in range(1, len(suffixList)-1):
                 parameterFilePath=parameterFilePath+'.'+suffixList[i]
             parameterFilePath+="-parameter.txt"
             filename1 = open(parameterFilePath, 'w')
-            #存放参数及数据
             filename1.write("the number of divided layers:"+str(tableWidget.lz)+"\n")
             filename1.write("maximum number of iterations:"+str(tableWidget.kmax)+"\n")
             filename1.write("z_obs:"+str(tableWidget.z_obs)+"m\n")
@@ -1122,7 +1042,6 @@ class MainWindow(QMainWindow):
         else:
             QMessageBox.information(self, "Attention", "Please Fill in the Correct Suffix Name.")
             return
-        #状态栏提示保存成功
         self.status.showMessage("File Saves Successfully", 3000)
     
 if __name__ == "__main__":
