@@ -7,15 +7,14 @@ class Dialog3D(QDialog):
     def __init__(self, parent):
         super(Dialog3D, self).__init__(parent)
         self.father = parent
-        #绘制
+        
         layout = QVBoxLayout()
         
         label = QLabel(self)
-        label.setText("Please Choose the Variable to Paint")#请选择需要绘制3D图的测线
+        label.setText("Please Choose the Variable to Paint")
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label, 1)
         
-        #获取当前表格
         tableWidget = self.father.tableWidget
         groupBox = QGroupBox("Variable")
         groupBox.setFlat(True)
@@ -31,8 +30,7 @@ class Dialog3D(QDialog):
         groupBox.setLayout(layoutCenter)
         layout.addWidget(groupBox, 3)
         layout.addStretch(1)
-        #添加选项
-        #添加选项
+
         label1 = QLabel()
         label1.setText("Color Bar Title：")
         label2 = QLabel()
@@ -47,14 +45,14 @@ class Dialog3D(QDialog):
         self.le = QLineEdit()
         self.cb1 = QComboBox(self)
         self.cbItems1 = ['g.u.', 'E', 'mGal']
-        self.cb1.addItems(self.cbItems1)#添加下拉选项
+        self.cb1.addItems(self.cbItems1)
         self.cb3 = QComboBox(self)
         self.cbItems3 = ['m', 'km']
-        self.cb3.addItems(self.cbItems3)#添加下拉选项
+        self.cb3.addItems(self.cbItems3)
         self.cb4 = QComboBox(self)
         self.cbItems4 = ['m', 'km']
-        self.cb4.addItems(self.cbItems4)#添加下拉选项
-        #写界面
+        self.cb4.addItems(self.cbItems4)
+        
         layout2 = QHBoxLayout()
         layout2.addStretch(1)
         layout2.addWidget(label1, 2)
@@ -74,7 +72,6 @@ class Dialog3D(QDialog):
         layout.addLayout(layout1)
         layout.addStretch(1)
         
-        #添加按钮
         layoutBottom = QHBoxLayout()
         layoutBottom.addStretch(5)
         ok = QPushButton("OK", self)
@@ -87,20 +84,18 @@ class Dialog3D(QDialog):
         
         self.setLayout(layout)
         self.setWindowTitle("Choose Variable to Paint")
-        #去掉问号
+       
         self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint)
-        #信号槽
+        
         ok.clicked.connect(self.on_ok_clicked)
         cancel.clicked.connect(self.on_cancel_clicked)
-        
-        
-    #ok
+               
     def on_ok_clicked(self):
-        #绘制剖面图
-        position = self.father.tab.currentIndex()#当前Tab页索引
+        
+        position = self.father.tab.currentIndex()
         tableWidget = self.father.tableWidget
         index = self.father.index
-        #获取X&Y的位置
+        
         xposition=tableWidget.xcol
         yposition=tableWidget.ycol
         fileName=""
@@ -109,7 +104,7 @@ class Dialog3D(QDialog):
         z=[]
         for i in range(0, len(self.button)):
             if self.button[i].isChecked()==True:
-                #获取当前侧线的位置
+               
                 vposition=0
                 for k in range(1, tableWidget.lieCount+1):
                     if tableWidget.item(0, k).text()==self.button[i].text():
@@ -143,11 +138,11 @@ class Dialog3D(QDialog):
                         
         if fileName=="":
             return
-        #此处获得的数据：1、x列表；2、y列表；3、图名；4、x单位；5、y轴单位；6、z列表；7、colorbarTitle；#8、是否显示等值线；9、是否显示数值；
+        
         xunit = self.cbItems3[self.cb3.currentIndex()]
         yunit = self.cbItems4[self.cb4.currentIndex()]
         zunit = self.cbItems1[self.cb1.currentIndex()]
-        colorbarTitle = self.le.text()#可能为空
+        colorbarTitle = self.le.text()
         
         if xunit == 'km':
             x = [i / 1000 for i in x]
@@ -158,20 +153,18 @@ class Dialog3D(QDialog):
         mw.mpl.D3Paint(fileName, x, y, z, xunit, yunit, zunit, colorbarTitle)
         
         finalName = fileName + " 3D Map"
-        #设置子窗口
+        
         sub = QMdiSubWindow()
         sub.setWindowIcon(QIcon(".\\image\\logo.png"))
         sub.setWidget(mw)
-        # sub.setWindowTitle(finalName)
         self.father.tab.widget(position).addSubWindow(sub)
-        self.father.tab.widget(position).setActiveSubWindow(sub)
-        #self.father.tab.widget(position).cascadeSubWindows()#级联显示
+        self.father.tab.widget(position).setActiveSubWindow(sub)        
         sub.show()
-        #更改 tree_record 的值
+        
         root = self.father.tree.topLevelItem(position-1)
         child_name = 'view_'+str(self.father.paintCount[position-1]) 
         root_name = root.text(0)
-        # 判断重名
+        
         order = 1
         flag = 0
         name_temp = finalName
@@ -189,7 +182,7 @@ class Dialog3D(QDialog):
             name_temp = finalName + '_' +str(order)
             order = order + 1
         sub.setWindowTitle(finalName)
-        #添加子树
+        
         newItem = QTreeWidgetItem(root)
         newItem.setText(0, finalName)
         
@@ -197,22 +190,12 @@ class Dialog3D(QDialog):
         'color_Bar_Title':str(colorbarTitle), 'X_axis_unit':str(xunit), 'Y_axis_unit':str(yunit), 'Z_axis_unit':str(zunit), \
         'Choose':str(vposition), 'index':index}
         self.father.paintCount[position-1] = self.father.paintCount[position-1] +1
-        #设置树上root为选中状态
+        
         for i in range(0, root.childCount()):
             root.child(i).setSelected(0)
         newItem.setSelected(1)
         root.setSelected(0)
         self.close()
-        
-    #cancel
+
     def on_cancel_clicked(self):
-        self.close()
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        self.close()    
