@@ -7,7 +7,7 @@ class DialogSetXY(QDialog):
         super(DialogSetXY, self).__init__(parent)
         self.father = parent
         tableWidget = self.father.tableWidget
-        #设计界面，可以让用户选择x，y，下拉菜单
+        
         label1 = QLabel("set X:")
         label2 = QLabel("set Y:")
         self.xcb = QComboBox(self)
@@ -58,5 +58,4 @@ class DialogSetXY(QDialog):
         QMessageBox.information(self, "Congratulation", "Set Success")
         self.close()
     def on_cancel_clicked(self):
-        self.close()
-        
+        self.close()     
