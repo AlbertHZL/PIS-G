@@ -308,7 +308,7 @@ class DialogAlgorithm(QDialog):
         try:
             result = Objdll.foo(Point_count,  Prism_count,  Lx,  Ly,  Lz,  Kmax, MMax_GPU_Number, NThreadPerBlock,  Z_obs, Dz, Zmax, M_min, M_max,\
             Epsilon, Miu, Sigma,Wn, Zc,  Thick,  Vzz, X, Y)
-        except:
+        except(ValueError, MemoryError):
             tableWidget.inversionFlag = 1
             self.sinOut.emit(3)
             tableWidget.flag[0] = 0
