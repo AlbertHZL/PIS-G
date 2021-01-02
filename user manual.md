@@ -34,7 +34,7 @@ the inversion module would not work.
 
 (2) Create a new project: Click “New project” of “File” in the menu.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-1.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-1.jpg)
 
 (3) Load an existed project: Click “Load project” of “File” in the menu.
 
@@ -46,33 +46,33 @@ save the project before closing it or the data may be lost.
 ### 1.2 Import data
 (1) Click “Open File Data” of “File” in the menu.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-2.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-2.jpg)
 
 (2) Choose the file to import.
 
 (3) Preview the data, import the row number in “Data Start Line”, default is 1.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-3.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-3.jpg)
  
 (4) After the preview, the names of data in columns could be revised. Rename it directly in the table. Click “Finish” to finish the wizards.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-4.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-4.jpg)
 
 ### 1.3 Data display and operation
 (1) Data is displayed in the table, sorted by line.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-5.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-5.jpg)
 
 (2) Right click on the data, click “Copy” or “Cut” or “Delete” or “Paste”.
 
 (3) Data would be changed as user’s operation.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-6.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-6.jpg)
 
 ### 1.4 Set X & Y Coordinate
 (1) Click “Set X & Y” of “Coordinate” in the menu.
  
- ![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-7.jpg)
+ ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-7.jpg)
 
 (2) Determine which column of data is x or y coordinate by drop-down list.
 
@@ -88,7 +88,7 @@ save the project before closing it or the data may be lost.
 ### 2.1 Profile
 (1) Click “Profile” of “Paint” in the menu.
  
- ![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-8.jpg)
+ ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-8.jpg)
 
 (2) Variable: choose which data to be displayed by checkbox.
 
@@ -103,7 +103,7 @@ save the project before closing it or the data may be lost.
 ### 2.2 Grid
 (1) Click “Grid” of “Paint” in the menu.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-9.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-9.jpg)
 
 (2) Variable: choose which data to be displayed by checkbox.
 
@@ -116,7 +116,7 @@ save the project before closing it or the data may be lost.
 ### 2.3 3D view of Grid
 (1) Click “3D” of “Paint” in the menu.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-10.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-10.jpg)
 
 (2) Variable: choose which data to be displayed by checkbox.
 
@@ -131,7 +131,7 @@ save the project before closing it or the data may be lost.
 
 (2) Click “Painting” of “Parallel 3D Inversion” in “Inversion”, the dialog below appears, import the parameters to obtain the figure.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-11.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-11.jpg)
 
 (3) lower or upper limit: the minimum or maximum value of the results to display.
 
@@ -142,7 +142,7 @@ save the project before closing it or the data may be lost.
 ## 3 Forwarding
 (1) Click “Forwarding” of “Forwarding” in the menu, forwarding wizard appears.
  
- ![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-12.jpg)
+ ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-12.jpg)
 
 (2) Number of Model: set the number of the prisms in the combination model.
 
@@ -156,16 +156,16 @@ save the project before closing it or the data may be lost.
 
 (7) Import the parameters for each prism model in order, the parameters are shown in the wizard below. The model shape could be selected by drop-down list, only cube is offered at present.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-13.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-13.jpg)
 
 (8) Preview the forwarding parameters for the model.
  
- ![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-14.jpg)
+ ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-14.jpg)
 
 ## 4 Inversion
 (1) Click “Calculation” of “Parallel 3D Inversion” in “Inversion”.
 
-![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-15.jpg)
+![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-15.jpg)
 
 (2) the number of divided layers: the number of prisms in z axis direction.
 
@@ -193,8 +193,8 @@ save the project before closing it or the data may be lost.
 
 (14) Click “OK” to start calculations.
  
- ![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-16.jpg)
+ ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-16.jpg)
 
 (15) If the inversion ends, a dialog is presented.
  
- ![image](https://github.com/AlbertHZL/PIS-G/blob/master/Supplementary_files/figures_in_user_manual/fig-17.jpg)
+ ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_user_manual/fig-17.jpg)
