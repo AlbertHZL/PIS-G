@@ -27,6 +27,8 @@ fig-3 Configuration information and new values
 
 (5) Click Generate button to produce the files.
 
+(6) Open "make_dlls.slm" with Visual Studio 2019 to produce two dlls.
+
 In addition, if you want to reproduce the inversion results of synthetic data in the paper, use the software as described in the file “user manual.md” or “user manual.pdf” in the folder of “supplementary_files”. Refer to the sections of “1.1 Project operation”, “1.2 Import data” and “4 Inversion” to reproduce the results. Refer to section of “2.4 3D view of Model (2)-(5)” for the 3D view of results, then right-click the plot of 3D view to obtain X-Y profile, X-Z profile and Y-Z profile. The input data is named “grav_rfi_data.txt” in the folder of “Test data”. The inversion parameters could be input as described in the section “4.1 Synthetic data test” of paper. The real data in the paper could not be offered because the data is supplied by the other organization, mentioned in the section of “Acknowledgement” in the paper.
 
 Name of program: Parallel Inversion Software of Gravity gradiometry data (PIS-G)
