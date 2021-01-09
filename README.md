@@ -7,12 +7,18 @@ Before compiling the source codes, two dlls are needed, produced by “Forwardin
 (1) Go to https://cmake.org/download/ to download a distribution of CMake, here we download “cmake-3.19.2-win64-x64.msi”.
 (2) Once CMake is installed, two directories should be prepared to build a project, one for the source code, the other for the binaries. Here are our directories: “C:\Users\Hou-ZL\Desktop\make_dlls”, where the source codes are located, including “Forwarding_DLL.h”, “Forwarding_DLL.cpp”, “grav_rfi_ompcuda.h”, “grav_rfi_ompcuda.cu” and “CMakeLists.txt”; “C:\Users\Hou-ZL\Desktop\make_dlls\build”, where the binary files are located.
 (3) Run cmake-gui.exe, specify the directories, see fig-1.
+
 ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_README/fig-1.jpg)
+
 fig-1 CMake UI
 (4) Click Configure button to show a configuration dialog, specify the generator, here we choose “Visual Studio 16 2019”, see fig-2. New values would be shown and colored red, some information is displayed at the bottom of UI, see fig-3.
+
 ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_README/fig-2.jpg)
+
 fig-2 Configuration dialog
+
 ![image](https://github.com/AlbertHZL/PIS-G/blob/master/supplementary_files/figures_in_README/fig-3.jpg)
+
 fig-3 Configuration information and new values
 (5) Click Generate button to produce the files.
 
