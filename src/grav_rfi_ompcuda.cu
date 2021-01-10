@@ -6,8 +6,6 @@
 # include <omp.h>
 # include <cuda.h>
 # include <cuda_runtime.h>
-# include <helper_functions.h>
-# include <helper_cuda.h>
 # include <device_launch_parameters.h>
 
 struct Vz_struct
@@ -131,7 +129,7 @@ double* rwt_foc_inv(int deviceCount, int h_point_count, int h_prism_count, int h
 	struct input_struct *i_struct = new struct input_struct[Max_GPU_Number];
 	struct Vz_mat_mc_struct *v_struct = new struct Vz_mat_mc_struct[Max_GPU_Number];
 	struct rfi_struct *r_struct = new struct rfi_struct[Max_GPU_Number];
-	
+
 	int k = 0;
 	double alpha, beta, rms, h_d_square, h_phi_m;
 	double* h_data_misfit = (double*)malloc(h_point_count * sizeof(double));
@@ -744,4 +742,3 @@ double vector_dot_product(double* a, double* b, int count)
 	}
 	return result;
 }
-
