@@ -7,7 +7,7 @@ Before compiling the source codes, two dlls are needed, produced by “Forwardin
 
 (1) Go to https://cmake.org/download/ to download a distribution of CMake, here we download “cmake-3.19.2-win64-x64.msi”.
 
-(2) Once CMake is installed, two directories should be prepared to build a project, one for the source code, the other for the binaries. Here are our directories: “C:\Users\Hou-ZL\Desktop\make_dlls”, where the source codes are located, including “Forwarding_DLL.h”, “Forwarding_DLL.cpp”, “grav_rfi_ompcuda.h”, “grav_rfi_ompcuda.cu” and “CMakeLists.txt”; “C:\Users\Hou-ZL\Desktop\make_dlls\build”, where the binary files are located.
+(2) Once CMake is installed, two directories should be prepared to build a project, one for the source codes, the other for the binaries. For example, here are our directories: “C:\Users\AlbertHZL\Desktop\src”, where the source codes are located, including “Forwarding_DLL.h”, “Forwarding_DLL.cpp”, “grav_rfi_ompcuda.h”, “grav_rfi_ompcuda.cu” and “CMakeLists.txt”; “C:\Users\AlbertHZL\Desktop\src\build”, where the binary files are located.
 
 (3) Run cmake-gui.exe, specify the directories, see fig-1.
 
