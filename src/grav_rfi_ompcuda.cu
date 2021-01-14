@@ -129,7 +129,7 @@ double* rwt_foc_inv(int deviceCount, int h_point_count, int h_prism_count, int h
 	struct input_struct *i_struct = new struct input_struct[Max_GPU_Number];
 	struct Vz_mat_mc_struct *v_struct = new struct Vz_mat_mc_struct[Max_GPU_Number];
 	struct rfi_struct *r_struct = new struct rfi_struct[Max_GPU_Number];
-
+	
 	int k = 0;
 	double alpha, beta, rms, h_d_square, h_phi_m;
 	double* h_data_misfit = (double*)malloc(h_point_count * sizeof(double));
@@ -347,7 +347,6 @@ double* rwt_foc_inv(int deviceCount, int h_point_count, int h_prism_count, int h
 				}
 			}
 			beta = beta_sln(h_g, h_g0, h_prism_count);
-			//beta = vector_dot_product(h_g, h_g, h_prism_count) / vector_dot_product(h_g0, h_g0, h_prism_count);
 
 #pragma omp parallel num_threads(deviceCount)
 			{
@@ -457,7 +456,6 @@ double* rwt_foc_inv(int deviceCount, int h_point_count, int h_prism_count, int h
 		cudaFree(r_struct[i].d_d_fit_temp);
 		cudaStreamDestroy(r_struct[i].stream);
 	}
-	//free(h_data_misfit); free(h_data_fitting); free(h_g); free(h_g0); free(h_q); free(h_d_fit_temp);
 
 	return inv_result;
 }
@@ -549,8 +547,7 @@ __global__ void A_mult_v_col_sln(double* q, double* Vz_mat_mc, double* W, double
 	int i_base, m, n, px, py, pi, pj, pk, index;
 	double temp;
 	extern __shared__ double V_temp_shared[];
-	//cudaMalloc((void**)V_temp_shared, nThreadPerBlock * sizeof(double));
-
+	V_temp_shared[threadIdx.x]=0;
 
 	if (i < localNum)
 	{
@@ -565,7 +562,6 @@ __global__ void A_mult_v_col_sln(double* q, double* Vz_mat_mc, double* W, double
 			pj = abs(n - py) + 1;
 			index = (pk - 1) * point_count + (pj - 1) * lx + pi - 1;
 			V_temp_shared[threadIdx.x] = Vz_mat_mc[index] * W[i] * vector[i];
-			//*(V_temp_shared + threadIdx.x) = Vz_mat_mc[index] * W[i] * vector[i];
 			__syncthreads();
 			temp = 0;
 			if (threadIdx.x == 0)
@@ -573,7 +569,6 @@ __global__ void A_mult_v_col_sln(double* q, double* Vz_mat_mc, double* W, double
 				for (int k = 0; k < nThreadPerBlock; k++)
 				{
 					temp += V_temp_shared[k];
-					//temp += *(V_temp_shared + k);
 				}
 				q[blockIdx.x * point_count + j] = temp;
 			}
@@ -628,7 +623,7 @@ __global__ void G_mult_m_col_sln(double* d_fit, double* Vz_mat_mc, double* m_tem
 	int i_base, m, n, px, py, pi, pj, pk, index;
 	double temp;
 	extern __shared__ double V_temp_shared[];
-	//cudaMalloc((void**)V_temp_shared, nThreadPerBlock * sizeof(double));
+	V_temp_shared[threadIdx.x]=0;
 
 	if (i < localNum)
 	{
@@ -643,7 +638,6 @@ __global__ void G_mult_m_col_sln(double* d_fit, double* Vz_mat_mc, double* m_tem
 			pj = abs(n - py) + 1;
 			index = (pk - 1) * point_count + (pj - 1) * lx + pi - 1;
 			V_temp_shared[threadIdx.x] = Vz_mat_mc[index] * m_temp[i];
-			//*(V_temp_shared + threadIdx.x) = Vz_mat_mc[index] * m_temp[i];
 			__syncthreads();
 			temp = 0;
 			if (threadIdx.x == 0)
@@ -651,7 +645,6 @@ __global__ void G_mult_m_col_sln(double* d_fit, double* Vz_mat_mc, double* m_tem
 				for (int k = 0; k < nThreadPerBlock; k++)
 				{
 					temp += V_temp_shared[k];
-					//temp += *(V_temp_shared + k);
 				}
 				d_fit[blockIdx.x * point_count + j] = temp;
 			}
