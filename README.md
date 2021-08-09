@@ -32,7 +32,6 @@ fig-3 Configuration information and new values
 In addition, if you want to reproduce the inversion results of synthetic data, use the software as described in the file “user manual.md” or “user manual.pdf” in the folder of “supplementary_files”. Refer to the sections of “1.1 Project operation”, “1.2 Import data” and “4 Inversion” to reproduce the results. Refer to section of “2.4 3D view of Model (2)-(5)” for the 3D view of results, then right-click the plot of 3D view to obtain X-Y profile, X-Z profile and Y-Z profile. The input data is named “grav_rfi_data.txt” in the folder of “Test data”.
 
 Name of program: Parallel Inversion Software of Gravity gradiometry data (PIS-G)
-Title of the manuscript: Three dimensional inversion and software development of vertical gravity gradient based on multiple GPUs
 Developer: Zhenlong Hou, Jikang Wei, Tianxiao Mao, Yujun Zheng, Yuchen Ding
 Contact address: NO. 3-11, Wenhua Road, Heping District, Shenyang, P. R. China
 Telephone number: +8618309831845
